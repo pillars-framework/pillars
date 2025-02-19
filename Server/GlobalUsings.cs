@@ -6,6 +6,8 @@ global using HogWarpSdk;
 global using HogWarpSdk.Systems;
 global using HogWarpSdk.Internal;
 global using HogWarpSdk.Game.Types;
+global using HPlayer = HogWarpSdk.Game.Player;
+global using System.Text.RegularExpressions;
 
 namespace Pillars;
 
