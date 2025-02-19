@@ -1,1 +1,32 @@
 # pillars
+
+## Roadmap 🚩
+- [ ] Bootstrapper & Pillars Loader: Lädt alle controller im PostLoad, ruft deren InitializeAsync auf, bei Exception -> Environment.Exit(1)
+- [ ] Logger
+- [ ] HogWarp Models -> Pillar Models Wrapper (Player)
+- [ ] HogWarp Events -> Pillar Events Wrapper, mit Models gemäß Pillar Models
+- [ ] Database (MongoDB)
+- [ ] "ServerController"
+  - [ ] Custom Event wenn server gestartet ist
+  - [ ] Liest server.config aus
+- [ ] Account, gebunden an DiscordId
+- [ ] ConnectionLogs
+- [ ] "Bouncer":
+  - [ ] DiscordId Bans, mit "Reason"
+  - [ ] PlayerConnect Event, wenn Ban vorhanden -> Kick Player
+  - [ ] Bei okay: custom OnPlayerConnect event
+  - [ ] "Reserved Slots"
+- [ ] "Admin":
+  - [ ] ACP, mit DiscordId wie bei MintV
+  - [ ] Player Übersicht
+  - [ ] Kicken, Bannen
+  - [ ] Logs einsehen
+  - [ ] Zusatz: Hogwarts Leaflet mit Player ansicht
+  - [ ] Maybe ingame?
+- [ ] "Chat":
+  - [ ] Bessere Chat integration
+- [ ] "Voice":
+  - [ ] ????
+- [ ] "Spells":
+  - [ ] Grant Spell / Revoke Spell / RegisterCustomSpell (muss mit client files zusammenarbeiten)
+  - [ ] Granted spells in db speichern, revoked aus db entfernen, am Charakter
