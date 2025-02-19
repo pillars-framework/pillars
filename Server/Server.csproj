@@ -17,4 +17,14 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="4.2.0" />
+      <PackageReference Include="Serilog.Enrichers.ShortTypeName" Version="1.1.0" />
+      <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+      <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+      <PackageReference Include="Serilog.Sinks.Console.LogThemes" Version="0.3.0" />
+    </ItemGroup>
+
 </Project>
