@@ -16,7 +16,6 @@ global using ILogger = Serilog.ILogger;
 global using Pillars.Core.Logging;
 global using Pillars.Database.Configuration;
 global using MongoDB.Entities;
-global using Microsoft.Extensions.DependencyInjection;
 global using Pillars.Core.DI.Interfaces;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
@@ -28,4 +27,5 @@ global using Pillars.Core.Server.Data;
 global using Pillars.Core.Server.Controllers;
 global using Pillars.Core.Server.Events;
 global using Pillars.Core.Server.Helpers;
+global using Pillars.Core.Server.Models;
 
