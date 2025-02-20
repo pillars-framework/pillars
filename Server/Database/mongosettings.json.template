@@ -1,5 +1,7 @@
 ﻿{
-  "Database": "hogwarp",
-  "Host": "localhost",
-  "Port": 27017
+  "DatabaseSettings": {
+    "Database": "hogwarp",
+    "Host": "localhost",
+    "Port": 27017
+  }
 }

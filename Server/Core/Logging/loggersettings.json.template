@@ -1,0 +1,29 @@
+{
+  "Serilog": {
+    "Using": [
+      "Serilog.Sinks.Console",
+      "Serilog.Enrichers.ShortTypeName"
+    ],
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "theme": "Pillars.Core.Logging.ConsoleThemes::Console, Pillars",
+          "outputTemplate": "[{Timestamp:HH:mm:ss}] [{Level}] [{ShortTypeName}] {Message:lj}{NewLine}{Exception}"
+        }
+      }
+    ],
+    "Enrich": [
+      "WithShortTypeName",
+      "FromLogContext"
+    ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft.EntityFrameworkCore": "Warning",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Information",
+        "System": "Warning"
+      }
+    }
+  }
+}
