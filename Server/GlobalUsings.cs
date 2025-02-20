@@ -24,7 +24,8 @@ global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using Pillars.Core.Configuration.Models;
 global using Pillars.Core.DI.Helpers;
-
-
-namespace Pillars;
+global using Pillars.Core.Server.Data;
+global using Pillars.Core.Server.Controllers;
+global using Pillars.Core.Server.Events;
+global using Pillars.Core.Server.Helpers;
 

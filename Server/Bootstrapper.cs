@@ -5,7 +5,7 @@ public sealed class Bootstrapper
 {
     private readonly IHost _host;
     private static readonly ILogger _logger = Log.ForContext<Bootstrapper>();
-    
+
     private AppSettings? _appSettings { get; set; }
 
     public Bootstrapper()
@@ -16,7 +16,7 @@ public sealed class Bootstrapper
             .ConfigureAppConfiguration(ConfigureJsons)
             .ConfigureLogging(ConfigureLogging)
             .ConfigureServices(ConfigureServices);
-        
+
         _host = builder.Build();
     }
 
@@ -29,7 +29,7 @@ public sealed class Bootstrapper
         foreach (var json in jsonFiles)
             configurationBuilder.AddJsonFile(json, optional: false, reloadOnChange: true);
     }
-    
+
     /// <summary>
     /// Clear the EventLogin because it's not compatible with this usecase
     /// Sets the Serilog internal logger to our configured logger instance
@@ -41,7 +41,7 @@ public sealed class Bootstrapper
 
         //Add appsettings to the DI container
         loggingBuilder.Services.AddSingleton(_appSettings);
-        
+
         // Clear existing providers because they are not supported for our usecase
         loggingBuilder.ClearProviders();
 
@@ -55,9 +55,9 @@ public sealed class Bootstrapper
             .MinimumLevel.Verbose()
             .WriteTo.Logger(logger)
             .CreateLogger();
-        
+
         _logger.Information("Logger & AppSettings configured, injecting additional settings ...");
-        
+
         var settingTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISettings))).ToList();
         foreach (var settingType in settingTypes)
         {
@@ -67,7 +67,7 @@ public sealed class Bootstrapper
         }
         _logger.Information("... Done !");
     }
-    
+
     /// <summary>
     /// Adds all our necessary services to the DI container
     /// </summary>
@@ -79,17 +79,17 @@ public sealed class Bootstrapper
         services.AutoRegister();
         services.BuildServiceProvider();
     }
-    
+
     /// <summary>
     /// Scans for all registered singletons inside this assembly
     /// and instantiates them for future use
     /// </summary>
     private void ScanForAttributeInstantiation()
     {
-        foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttribute<RegisterSingletonAttribute>() is not null)) 
+        foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttribute<RegisterSingletonAttribute>() is not null))
             _ = _host.Services.GetRequiredService(type);
     }
-    
+
     /// <summary>
     /// Initializes the DI container , searches for all attributes
     /// that need to be instantiated and runs the current host
@@ -101,7 +101,8 @@ public sealed class Bootstrapper
             _logger.Information("DI container initialized, starting host...");
             await DependencyGraphHelper.ResolveControllerInitialization(_host.Services);
             ScanForAttributeInstantiation();
-
+            // Emit signal to distribute initialization completion
+            _host.Services.GetRequiredService<ServerController>().ServerInitialized();
             // Runs the host asynchronously and continues with exiting the environment with a code of -1
             return _host.RunAsync().ContinueWith(_ => Environment.Exit(-1));
         }
@@ -112,7 +113,7 @@ public sealed class Bootstrapper
         Environment.Exit(1); // Force Shutdown
         return Task.CompletedTask;
     }
-    
-    
+
+
 
 }

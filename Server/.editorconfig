@@ -412,3 +412,11 @@ csharp_preserve_single_line_blocks = true
 
 # Namespace options
 csharp_style_namespace_declarations = file_scoped:warning
+dotnet_naming_rule.enum_pascal_case.symbols = enum_symbols
+dotnet_naming_rule.enum_pascal_case.style = uppercase_style
+dotnet_naming_rule.enum_pascal_case.severity = error
+
+dotnet_naming_symbols.enum_symbols.applicable_kinds = enum
+dotnet_naming_symbols.enum_symbols.applicable_accessibilities = *
+
+dotnet_naming_style.uppercase_style.capitalization = all_upper
