@@ -8,7 +8,17 @@ public sealed class Plugin : IPlugin
 
     public Plugin()
     {
-        
+        Task.Run(async () =>
+        {
+            try
+            {
+                await new Bootstrapper().RunAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        });
     }
 
     public void PostLoad() {}
