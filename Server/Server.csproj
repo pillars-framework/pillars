@@ -23,6 +23,12 @@
             <TargetPath>..\..\mongosettings.json</TargetPath>
         </None>
     </ItemGroup>
+    <ItemGroup>
+        <None Update="Core\Logging\loggersettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>..\..\loggersettings.json</TargetPath>
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
         <Reference Include="HogWarpSdk">

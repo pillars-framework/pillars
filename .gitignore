@@ -4,3 +4,4 @@
 .idea/
 *.user
 Server/appsettings.json
+**/*settings.json

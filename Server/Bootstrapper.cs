@@ -20,14 +20,14 @@ public sealed class Bootstrapper
         _host = builder.Build();
     }
 
+    /// <summary>
+    /// Loads all "*settings.json" from the server directory and adds them to the configuration builder.
+    /// </summary>
     private void ConfigureJsons(HostBuilderContext context, IConfigurationBuilder configurationBuilder)
     {
         var jsonFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*settings.json", SearchOption.TopDirectoryOnly);
-
         foreach (var json in jsonFiles)
-        {
             configurationBuilder.AddJsonFile(json, optional: false, reloadOnChange: true);
-        }
     }
     
     /// <summary>
@@ -42,17 +42,7 @@ public sealed class Bootstrapper
         //Add appsettings to the DI container
         loggingBuilder.Services.AddSingleton(_appSettings);
         
-        var settingTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISettings))).ToList();
-
-        //TODO:: fix settings not loaded correctly cause jsons are split now and not in one file
-        foreach (var settingType in settingTypes)
-        {
-            var setting = context.Configuration.GetSection(nameof(settingType)).Get(settingType);
-            if (setting != null) 
-                loggingBuilder.Services.AddSingleton(setting);
-        }
-
-        //Clear existing providers because they are not supported for our usecase
+        // Clear existing providers because they are not supported for our usecase
         loggingBuilder.ClearProviders();
 
         // Configures the logger for the console
@@ -65,6 +55,17 @@ public sealed class Bootstrapper
             .MinimumLevel.Verbose()
             .WriteTo.Logger(logger)
             .CreateLogger();
+        
+        _logger.Information("Logger & AppSettings configured, injecting additional settings ...");
+        
+        var settingTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISettings))).ToList();
+        foreach (var settingType in settingTypes)
+        {
+            var setting = context.Configuration.GetSection(settingType.Name).Get(settingType);
+            if (setting is not null)
+                loggingBuilder.Services.AddSingleton(settingType, setting);
+        }
+        _logger.Information("... Done !");
     }
     
     /// <summary>
