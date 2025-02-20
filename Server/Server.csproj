@@ -4,12 +4,25 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <OutputPath>$(SolutionDir)..\..\..\Mods\$(AssemblyName)\</OutputPath>
+        <OutputPath>$(SolutionDir)..\..\..\Mods\Pillars\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <AssemblyName>Pillars</AssemblyName>
         <RootNamespace>Pillars</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>..\..\appsettings.json</TargetPath>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="Database\mongosettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>..\..\mongosettings.json</TargetPath>
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
         <Reference Include="HogWarpSdk">
@@ -18,6 +31,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoRegisterInject" Version="1.4.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+      <PackageReference Include="MongoDB.Entities" Version="24.1.1" />
       <PackageReference Include="Serilog" Version="4.2.0" />
       <PackageReference Include="Serilog.Enrichers.ShortTypeName" Version="1.1.0" />
       <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
