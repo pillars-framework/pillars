@@ -46,4 +46,9 @@
 		<PackageReference Include="Serilog.Sinks.Console.LogThemes" Version="0.3.0"/>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Chat\Models\" />
+	  <Folder Include="Core\Accounts\Models\" />
+	</ItemGroup>
+
 </Project>

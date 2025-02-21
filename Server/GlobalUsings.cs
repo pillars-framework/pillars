@@ -31,3 +31,5 @@ global using Pillars.Core.Server.Models;
 global using Pillars.Core.Player.Models;
 global using Pillars.Core.Player.Controllers;
 global using Pillars.Core.Player.Events;
+global using Pillars.Entities;
+
