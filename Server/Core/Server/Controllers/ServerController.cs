@@ -16,10 +16,11 @@ public sealed class ServerController
 	{
 		_logger = l.ForThisContext();
 		_serverEvents = se;
-		HogWarpConfig = LoadHogWarpConfig() ?? throw new ("Could not load HogWarpConfig");
+		HogWarpConfig = LoadHogWarpConfig() ?? throw new("Could not load HogWarpConfig");
 	}
 
 	#region HogWarp
+
 	public readonly HogWarpConfig HogWarpConfig;
 
 	/// <summary>
@@ -49,6 +50,7 @@ public sealed class ServerController
 			return null;
 		}
 	}
+
 	#endregion
 
 	/// <summary>

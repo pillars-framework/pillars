@@ -28,4 +28,6 @@ global using Pillars.Core.Server.Controllers;
 global using Pillars.Core.Server.Events;
 global using Pillars.Core.Server.Helpers;
 global using Pillars.Core.Server.Models;
-
+global using Pillars.Core.Player.Models;
+global using Pillars.Core.Player.Controllers;
+global using Pillars.Core.Player.Events;
