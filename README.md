@@ -1,14 +1,14 @@
 # pillars
 
 ## Roadmap 🚩
-- [ ] Bootstrapper & Pillars Loader: Lädt alle controller im PostLoad, ruft deren InitializeAsync auf, bei Exception -> Environment.Exit(1)
-- [ ] Logger
-- [ ] HogWarp Models -> Pillar Models Wrapper (Player)
-- [ ] HogWarp Events -> Pillar Events Wrapper, mit Models gemäß Pillar Models
-- [ ] Database (MongoDB)
-- [ ] "ServerController"
-  - [ ] Custom Event wenn server gestartet ist
-  - [ ] Liest server.config aus
+- [x] Bootstrapper & Pillars Loader: Lädt alle controller im PostLoad, ruft deren InitializeAsync auf, bei Exception -> Environment.Exit(1)
+- [x] Logger
+- [x] HogWarp Models -> Pillar Models Wrapper (Player)
+- [x] HogWarp Events -> Pillar Events Wrapper, mit Models gemäß Pillar Models
+- [x] Database (MongoDB)
+- [x] "ServerController"
+  - [x] Custom Event wenn server gestartet ist
+  - [x] Liest server.config aus
 - [ ] Account, gebunden an DiscordId
 - [ ] ConnectionLogs
 - [ ] "Bouncer":
