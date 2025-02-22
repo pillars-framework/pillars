@@ -6,15 +6,6 @@
 [RegisterSingleton]
 public sealed class PlayerConnectionEvents
 {
-	private readonly PlayerController _playerController;
-
-	public PlayerConnectionEvents(PlayerController pc)
-	{
-		_playerController = pc;
-		HogWarpSdk.Server.PlayerSystem.PlayerJoinEvent += PlayerJoined;
-		HogWarpSdk.Server.PlayerSystem.PlayerLeftEvent += PlayerLeft;
-	}
-
 	#region CONNECT
 
 	/// <summary>
@@ -30,8 +21,8 @@ public sealed class PlayerConnectionEvents
 	/// <summary>
 	/// Invokes the player connected event
 	/// </summary>
-	private void PlayerJoined(HPlayer player) =>
-		OnPlayerConnected?.Invoke(_playerController.CreatePlayer(player));
+	public void PlayerConnected(PiPlayer player) =>
+		OnPlayerConnected?.Invoke(player);
 
 	#endregion
 
@@ -50,12 +41,8 @@ public sealed class PlayerConnectionEvents
 	/// <summary>
 	/// Invokes the player connected event
 	/// </summary>
-	private void PlayerLeft(HPlayer player)
-	{
-		var piplayer = _playerController.DestroyPlayer(player);
-		if (piplayer is null) return;
-		OnPlayerDisconnected?.Invoke(piplayer);
-	}
+	public void PlayerDisconnected(PiPlayer player) =>
+		OnPlayerDisconnected?.Invoke(player);
 
 	#endregion
 }

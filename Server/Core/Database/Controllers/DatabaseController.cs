@@ -1,4 +1,7 @@
-﻿namespace Pillars.Database.Controllers;
+﻿namespace Pillars.Core.Database.Controllers;
+
+using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
 
 [RegisterSingleton(typeof(DatabaseController))]
 public sealed class DatabaseController(ILogger logger, DatabaseSettings settings) : IController
