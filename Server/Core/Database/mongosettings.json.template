@@ -2,6 +2,7 @@
   "DatabaseSettings": {
     "Database": "hogwarp",
     "Host": "localhost",
-    "Port": 27017
+    "Port": 27017,
+    "DebugLog": false
   }
 }

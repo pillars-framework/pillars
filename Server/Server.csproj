@@ -47,8 +47,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Chat\Models\" />
-	  <Folder Include="Core\Accounts\Models\" />
+		<Folder Include="Chat\Models\"/>
 	</ItemGroup>
 
 </Project>
