@@ -1,18 +1,35 @@
 ﻿namespace Pillars.Core.Database.Controllers;
 
-using MongoDB.Driver;
-using MongoDB.Driver.Core.Configuration;
-
 [RegisterSingleton(typeof(DatabaseController))]
 public sealed class DatabaseController(ILogger logger, DatabaseSettings settings) : IController
 {
 	private readonly ILogger _logger = logger.ForThisContext();
 
+	/// <summary>
+	/// Initializes the database and applies configuration
+	/// from the database settings.
+	/// </summary>
 	public async Task InitializeAsync()
 	{
 		try
 		{
-			await DB.InitAsync(settings.Database, settings.Host, settings.Port);
+			MongoClientSettings clientsettings = new() { Server = new(settings.Host, settings.Port) };
+
+			// Apply optional credential
+			if (settings.Credentials is not null)
+				clientsettings.Credential =
+					MongoCredential.CreateCredential(settings.Database,
+						settings.Credentials.User, settings.Credentials.Password);
+
+			// Enable debug log, if set
+			if (settings.DebugLog)
+				clientsettings.ClusterConfigurator = cb =>
+				{
+					cb.Subscribe<CommandStartedEvent>(e =>
+						_logger.Debug("{command}", e.Command.ToJson()));
+				};
+
+			await DB.InitAsync(settings.Database, clientsettings);
 		}
 		catch (Exception e)
 		{

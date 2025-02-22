@@ -84,7 +84,8 @@ public sealed class Bootstrapper
 	/// </summary>
 	private void ScanForAttributeInstantiation()
 	{
-		foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttribute<RegisterSingletonAttribute>() is not null)) _ = _host.Services.GetRequiredService(type);
+		foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttribute<RegisterSingletonAttribute>() is not null))
+			_ = _host.Services.GetRequiredService(type);
 	}
 
 	/// <summary>

@@ -13,11 +13,12 @@ public class DependencyGraphHelper
 	{
 		RegisterControllersFromAssembly();
 		var orderedControllers = OrderControllersByDependencies()
-			.Select(controllerType => serviceProvider.GetRequiredService(controllerType) as IController);
+			.Select(controllerType => serviceProvider.GetRequiredService(controllerType) as IController)
+			.OfType<IController>();
 		foreach (var controller in orderedControllers)
 		{
-			_logger.Information("Initializing{c}",controller?.GetType().Name ?? "Unknown Controller");
-			await controller!.InitializeAsync();
+			await controller.InitializeAsync();
+			_logger.Information("{c} successfully initialized", controller.GetType().Name);
 		}
 	}
 
@@ -26,7 +27,8 @@ public class DependencyGraphHelper
 	/// </summary>
 	private static void RegisterControllersFromAssembly()
 	{
-		var controllerTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IController))).ToList();
+		var controllerTypes = Assembly.GetExecutingAssembly().GetTypes()
+			.Where(t => t.GetInterfaces().Contains(typeof(IController))).ToList();
 
 		// Populate the dependency graph based on controller types
 		foreach (var controllerType in controllerTypes)
@@ -73,6 +75,7 @@ public class DependencyGraphHelper
 		{
 			Visit(controllerType, _dependencies, visited, sortedControllers);
 		}
+
 		return sortedControllers;
 	}
 
