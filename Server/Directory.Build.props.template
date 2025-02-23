@@ -1,0 +1,5 @@
+<Project>
+	<PropertyGroup>
+		<HogWarpServerDirectory>PATH\TO\HOGWARP\Server\</HogWarpServerDirectory>
+	</PropertyGroup>
+</Project>

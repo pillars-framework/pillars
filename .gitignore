@@ -5,3 +5,4 @@
 *.user
 Server/appsettings.json
 **/*settings.json
+**/*.props
