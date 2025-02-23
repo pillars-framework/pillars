@@ -12,22 +12,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Update="appsettings.json">
+		<Content Update="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>..\..\appsettings.json</TargetPath>
-		</None>
+		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="Core\Database\mongosettings.json">
+		<Content Include="Core\Database\mongosettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>..\..\mongosettings.json</TargetPath>
-		</None>
+		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="Core\Logging\loggersettings.json">
+		<Content Update="Core\Logging\loggersettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>..\..\loggersettings.json</TargetPath>
-		</None>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
