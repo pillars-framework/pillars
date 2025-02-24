@@ -2,7 +2,7 @@
     <a href="https://hogwarp.com/" alt="HogWarp">
         <img src="https://img.shields.io/badge/HogWarp-v0.8.0_beta_2-informational?style=for-the-badge" /></a>
     <a href="https://discord.gg/X2D7Tk75pZ" alt="License_MIT">
-        <img src="https://img.shields.io/discord/1341872951565484072?style=for-the-badge&logo=discord&logoColor=#000000"/></a>
+        <img src="https://img.shields.io/badge/Discord-%20?style=for-the-badge&logo=discord&logoColor=ffffff&labelColor=5865F2&color=555555" /></a>
     <a href="#" alt="License_MIT">
         <img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge"/></a>
 </p>
