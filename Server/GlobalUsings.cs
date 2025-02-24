@@ -40,3 +40,15 @@ global using Pillars.Core.Accounts.Controllers;
 global using Pillars.Core.Accounts.Services;
 global using Pillars.Entities;
 global using Pillars.Core.Helpers;
+global using HogWarpSdk.Game;
+global using Pillars.Chat.Controllers;
+global using Pillars.Core.Actors.Models;
+global using HogWarp.Replicated;
+global using Pillars.Chat.Events;
+global using Pillars.Chat.Models;
+global using Pillars.Chat.Attributes;
+global using Pillars.HouseChat.Enums;
+global using Pillars.Chat.Attributes;
+global using Pillars.Chat.Enums;
+
+
