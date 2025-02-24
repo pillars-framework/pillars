@@ -1,3 +1,10 @@
+<p align="center">
+    <a href="https://www.4players.io/odin" alt="ODIN">
+        <img src="https://img.shields.io/badge/HogWarp-v0.8.0_beta_2-informational?style=for-the-badge" /></a>
+    <a href="#" alt="License_MIT">
+        <img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge"/></a>
+</p>
+
 # pillars
 
 ## Roadmap 🚩
