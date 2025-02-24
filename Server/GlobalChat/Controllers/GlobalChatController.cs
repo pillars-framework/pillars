@@ -36,6 +36,6 @@ public sealed class GlobalChatController
 	/// </summary>
 	/// <param name="player">The player who executed the command.</param>
 	[SlashCommand("global")]
-	public async Task GlobalCommand(PiPlayer player) => player.ActiveChatChannel = CHATCHANNEL.HOUSE;
+	public async Task GlobalCommand(PiPlayer player) => player.ActiveChatChannel = CHATCHANNEL.GLOBAL;
 
 }

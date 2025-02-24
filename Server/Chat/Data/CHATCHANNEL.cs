@@ -1,4 +1,4 @@
-﻿namespace Pillars.Chat.Enums;
+﻿namespace Pillars.Chat.Data;
 
 /// <summary>
 /// Represents the available chat channels that a player can participate in.
