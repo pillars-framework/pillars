@@ -39,3 +39,4 @@ global using Pillars.Core.Player.Helpers;
 global using Pillars.Core.Accounts.Controllers;
 global using Pillars.Core.Accounts.Services;
 global using Pillars.Entities;
+global using Pillars.Core.Helpers;

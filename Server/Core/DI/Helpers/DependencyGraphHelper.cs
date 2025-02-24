@@ -18,7 +18,7 @@ public class DependencyGraphHelper
 		foreach (var controller in orderedControllers)
 		{
 			await controller.InitializeAsync();
-			_logger.Information("{c} successfully initialized", controller.GetType().Name);
+			_logger.Information("Initialized  {c}", controller.GetType().Name);
 		}
 	}
 

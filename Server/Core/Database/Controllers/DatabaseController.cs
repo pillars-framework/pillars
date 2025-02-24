@@ -1,7 +1,7 @@
 ﻿namespace Pillars.Core.Database.Controllers;
 
-[RegisterSingleton(typeof(DatabaseController))]
-public sealed class DatabaseController(ILogger logger, DatabaseSettings settings) : IController
+[RegisterSingleton]
+public sealed class DatabaseController(ILogger logger, DatabaseSettings settings)
 {
 	private readonly ILogger _logger = logger.ForThisContext();
 

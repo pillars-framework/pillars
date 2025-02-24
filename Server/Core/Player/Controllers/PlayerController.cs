@@ -118,10 +118,20 @@ public sealed class PlayerController
 		}
 	}
 
+	/// <summary>
+	/// If a player leaves the server, we check if the player was correctly loaded /
+	/// a PiPlayer exists. If so, we will invoke an event and clear the collection
+	/// <see cref="PlayerConnectionEvents.OnPlayerDisconnected"/>
+	/// </summary>
+	/// <param name="hplayer">The HogWarp Player leaving</param>
 	private async Task PlayerLeft(HPlayer hplayer)
 	{
 		try
 		{
+			var piPlayer = DestroyPlayer(hplayer);
+			if (piPlayer is null)
+				return;
+			_playerConnectionEvents.PlayerDisconnected(piPlayer);
 		}
 		catch (Exception ex)
 		{
