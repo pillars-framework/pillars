@@ -36,6 +36,10 @@ public sealed class GlobalChatController
 	/// </summary>
 	/// <param name="player">The player who executed the command.</param>
 	[SlashCommand("global")]
-	public async Task GlobalCommand(PiPlayer player) => player.ActiveChatChannel = CHATCHANNEL.GLOBAL;
+	public async Task GlobalCommand(PiPlayer player)
+	{
+		player.ActiveChatChannel = CHATCHANNEL.GLOBAL;
+		_piChatActor.SendMessageToPlayer(player.Player, $"You are now talking in {player.ActiveChatChannel}");
+	}
 
 }

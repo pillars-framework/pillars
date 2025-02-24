@@ -37,6 +37,10 @@ public sealed class HouseChatController
 	/// </summary>
 	/// <param name="player">The player who executed the command.</param>
 	[SlashCommand("house")]
-	public async Task HouseCommand(PiPlayer player) => player.ActiveChatChannel = CHATCHANNEL.HOUSE;
+	public async Task HouseCommand(PiPlayer player)
+	{
+		player.ActiveChatChannel = CHATCHANNEL.HOUSE;
+		_piChatActor.SendMessageToPlayer(player.Player, $"You are now talking in {player.ActiveChatChannel}");
+	}
 
 }
