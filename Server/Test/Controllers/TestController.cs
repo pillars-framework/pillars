@@ -1,7 +1,5 @@
 ﻿namespace Pillars.Test.Controllers;
 
-using Core.Accounts;
-
 [RegisterSingleton]
 public sealed class TestController
 {
@@ -18,13 +16,12 @@ public sealed class TestController
 
 	private async Task OnPlayerConnect(PiPlayer player)
 	{
-		//var account = await _accountService.CreateAccount(player.DiscordId);
-
-		_logger.Information("Player {pid} joined, perform 30 second wait", player.Id);
-		await Task.Delay(30_000);
-		_logger.Information("Wait completed for {pid}", player.Id);
+		_logger.Debug("Player {pid} connected - Account:", player.Id);
+		_logger.Debug("{acc}", JsonSerializer.Serialize(player.Account));
 	}
 
-	private async Task OnPlayerDisconnect(PiPlayer player) =>
-		_logger.Information("Player {pid} left", player.Id);
+	private async Task OnPlayerDisconnect(PiPlayer player)
+	{
+		_logger.Debug("Player {pid} left", player.Id);
+	}
 }

@@ -25,8 +25,10 @@ public sealed class Bootstrapper
 	/// </summary>
 	private void ConfigureJsons(HostBuilderContext context, IConfigurationBuilder configurationBuilder)
 	{
-		var jsonFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*settings.json", SearchOption.TopDirectoryOnly);
-		foreach (var json in jsonFiles) configurationBuilder.AddJsonFile(json, optional: false, reloadOnChange: true);
+		var jsonFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*settings.json",
+			SearchOption.TopDirectoryOnly);
+		foreach (var json in jsonFiles)
+			configurationBuilder.AddJsonFile(json, optional: false, reloadOnChange: true);
 	}
 
 	/// <summary>
@@ -46,8 +48,10 @@ public sealed class Bootstrapper
 
 		// Configures the logger for the console
 		var logger = new LoggerConfiguration()
-			.ReadFrom.Configuration(context.Configuration, "Serilog", ConfigurationAssemblySource.AlwaysScanDllFiles)
-			.MinimumLevel.ControlledBy(new(_appSettings.IsDebug ? LogEventLevel.Debug : LogEventLevel.Information))
+			.ReadFrom.Configuration(context.Configuration, "Serilog",
+				ConfigurationAssemblySource.AlwaysScanDllFiles)
+			.MinimumLevel
+			.ControlledBy(new(_appSettings.IsDebug ? LogEventLevel.Debug : LogEventLevel.Information))
 			.CreateLogger();
 
 		Log.Logger = new LoggerConfiguration()
@@ -57,12 +61,14 @@ public sealed class Bootstrapper
 
 		_logger.Information("Logger & AppSettings configured, injecting additional settings ...");
 
-		var settingTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISettings))).ToList();
+		var settingTypes = Assembly.GetExecutingAssembly().GetTypes()
+			.Where(t => t.GetInterfaces().Contains(typeof(ISettings))).ToList();
 		foreach (var settingType in settingTypes)
 		{
 			var setting = context.Configuration.GetSection(settingType.Name).Get(settingType);
 			if (setting is not null) loggingBuilder.Services.AddSingleton(settingType, setting);
 		}
+
 		_logger.Information("... Done !");
 	}
 
@@ -84,7 +90,8 @@ public sealed class Bootstrapper
 	/// </summary>
 	private void ScanForAttributeInstantiation()
 	{
-		foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttribute<RegisterSingletonAttribute>() is not null))
+		foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
+			         .Where(t => t.GetCustomAttribute<RegisterSingletonAttribute>() is not null))
 			_ = _host.Services.GetRequiredService(type);
 	}
 
@@ -97,7 +104,13 @@ public sealed class Bootstrapper
 		try
 		{
 			_logger.Information("DI container initialized, starting host...");
+			// Ensure Database is always initialized
+			var db = _host.Services.GetRequiredService<DatabaseController>();
+			await db.InitializeAsync();
+			_logger.Information("Initialized {c}", db.GetType().Name);
+			// Initialize all other IControllers
 			await DependencyGraphHelper.ResolveControllerInitialization(_host.Services);
+			// Instantiate all other services
 			ScanForAttributeInstantiation();
 			// Emit signal to distribute initialization completion
 			_host.Services.GetRequiredService<ServerController>().ServerInitialized();
@@ -108,9 +121,8 @@ public sealed class Bootstrapper
 		{
 			_logger.Error(e, "An error occurred during bootstrapping");
 		}
+
 		Environment.Exit(1); // Force Shutdown
 		return Task.CompletedTask;
 	}
-
-
 }
