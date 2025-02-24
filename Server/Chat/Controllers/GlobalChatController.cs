@@ -1,4 +1,4 @@
-﻿namespace Pillars.GlobalChat.Controllers;
+﻿namespace Pillars.Chat.Controllers;
 
 [RegisterSingleton]
 public sealed class GlobalChatController

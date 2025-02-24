@@ -1,4 +1,4 @@
-﻿namespace Pillars.HouseChat.Controllers;
+﻿namespace Pillars.Chat.Controllers;
 
 [RegisterSingleton]
 public sealed class HouseChatController
