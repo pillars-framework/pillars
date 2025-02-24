@@ -1,39 +1,29 @@
 <p align="center">
     <a href="https://hogwarp.com/" alt="HogWarp">
         <img src="https://img.shields.io/badge/HogWarp-v0.8.0_beta_2-informational?style=for-the-badge" /></a>
+    <a href="https://discord.gg/X2D7Tk75pZ" alt="License_MIT">
+        <img src="https://img.shields.io/discord/1341872951565484072"/></a>
     <a href="#" alt="License_MIT">
         <img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge"/></a>
 </p>
 
-# pillars
+# Pillars
 
-## Roadmap 🚩
-- [x] Bootstrapper & Pillars Loader: Lädt alle controller im PostLoad, ruft deren InitializeAsync auf, bei Exception -> Environment.Exit(1)
-- [x] Logger
-- [x] HogWarp Models -> Pillar Models Wrapper (Player)
-- [x] HogWarp Events -> Pillar Events Wrapper, mit Models gemäß Pillar Models
-- [x] Database (MongoDB)
-- [x] "ServerController"
-  - [x] Custom Event wenn server gestartet ist
-  - [x] Liest server.config aus
-- [ ] Account, gebunden an DiscordId
-- [ ] ConnectionLogs
-- [ ] "Bouncer":
-  - [ ] DiscordId Bans, mit "Reason"
-  - [ ] PlayerConnect Event, wenn Ban vorhanden -> Kick Player
-  - [ ] Bei okay: custom OnPlayerConnect event
-  - [ ] "Reserved Slots"
-- [ ] "Admin":
-  - [ ] ACP, mit DiscordId wie bei MintV
-  - [ ] Player Übersicht
-  - [ ] Kicken, Bannen
-  - [ ] Logs einsehen
-  - [ ] Zusatz: Hogwarts Leaflet mit Player ansicht
-  - [ ] Maybe ingame?
-- [ ] "Chat":
-  - [ ] Bessere Chat integration
-- [ ] "Voice":
-  - [ ] ????
-- [ ] "Spells":
-  - [ ] Grant Spell / Revoke Spell / RegisterCustomSpell (muss mit client files zusammenarbeiten)
-  - [ ] Granted spells in db speichern, revoked aus db entfernen, am Charakter
+**Pillars** is a _HogWarp_ "single-plugin-framework" for server development, but can be extended to your liking, with very little knowledge required but still offering lots of configuration and customization.
+
+## Installation & Usage
+
+We created an extensive [documentation](https://pillars-framework.github.io/docs/). You'll find everything you need there.
+
+## Roadmap 🏁
+- [ ] An integrated Admin Control Panel, with easy to extend behavior
+- [ ] Voice Integration
+- [ ] Houses
+  - [ ] Point Tracker
+  - [ ] Representatives
+- [ ] Character
+  - [ ] Inventory
+  - [ ] Clothing / Equipment
+  - [ ] House Association
+- [ ] Spells
+  - [ ] Grant Spell / Revoke Spell / RegisterCustomSpell
