@@ -30,7 +30,9 @@ public sealed class ChatController
 	private void RegisterCommands()
 	{
 		foreach (var method in Assembly.GetExecutingAssembly().GetTypes()
-			         .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
+			         .SelectMany(t =>
+				         t.GetMethods(BindingFlags.Public | BindingFlags.Instance |
+				                      BindingFlags.Static))
 			         .Where(m => m.GetCustomAttribute<SlashCommandAttribute>() is not null))
 		{
 			var attribute = method.GetCustomAttribute<SlashCommandAttribute>();
@@ -61,7 +63,7 @@ public sealed class ChatController
 
 		var identifier = message.Split(' ')[0][1..];
 		if (!_registeredCommands.TryGetValue(identifier, out var command))
-			_piChatActor.SendMessageToPlayer(player.Player, $"The command {identifier} does not exist.");
+			_piChatActor.SendMessageToPlayer(player.Native, $"The command {identifier} does not exist.");
 		else
 		{
 			var instance = _serviceProvider.GetRequiredService(command.DeclaringType!);

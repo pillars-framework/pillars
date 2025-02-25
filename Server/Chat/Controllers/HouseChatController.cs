@@ -6,7 +6,7 @@ public sealed class HouseChatController
 	private readonly PlayerController _playerController;
 	private readonly PiChatActor _piChatActor;
 
-	public HouseChatController( PlayerController pc, ChatEvents ce, PiChatActor pica)
+	public HouseChatController(PlayerController pc, ChatEvents ce, PiChatActor pica)
 	{
 		_playerController = pc;
 		_piChatActor = pica;
@@ -29,7 +29,9 @@ public sealed class HouseChatController
 		if (message.StartsWith('/') || player.ActiveChatChannel != CHATCHANNEL.HOUSE) return;
 
 		foreach (var targetPlayer in _playerController.Players.Keys.Where(p => p.House == player.House))
-			_piChatActor.SendMessageToPlayer(targetPlayer, "<img id=\"" + (HOUSE)player.House + "\"/><" + (HOUSE)player.House + ">" + player.Username + ": " + message + "</>");
+			_piChatActor.SendMessageToPlayer(targetPlayer,
+				"<img id=\"" + (HOUSE)player.House + "\"/><" + (HOUSE)player.House + ">" +
+				player.Username + ": " + message + "</>");
 	}
 
 	/// <summary>
@@ -40,7 +42,6 @@ public sealed class HouseChatController
 	public async Task HouseCommand(PiPlayer player)
 	{
 		player.ActiveChatChannel = CHATCHANNEL.HOUSE;
-		_piChatActor.SendMessageToPlayer(player.Player, $"You are now talking in {player.ActiveChatChannel}");
+		_piChatActor.SendMessageToPlayer(player.Native, $"You are now talking in {player.ActiveChatChannel}");
 	}
-
 }

@@ -28,7 +28,6 @@ public sealed class GlobalChatController
 
 		foreach (var targetPlayer in _playerController.Players.Keys)
 			_piChatActor.SendMessageToPlayer(targetPlayer, $"{player.Username}: " + message);
-
 	}
 
 	/// <summary>
@@ -39,7 +38,6 @@ public sealed class GlobalChatController
 	public async Task GlobalCommand(PiPlayer player)
 	{
 		player.ActiveChatChannel = CHATCHANNEL.GLOBAL;
-		_piChatActor.SendMessageToPlayer(player.Player, $"You are now talking in {player.ActiveChatChannel}");
+		_piChatActor.SendMessageToPlayer(player.Native, $"You are now talking in {player.ActiveChatChannel}");
 	}
-
 }
