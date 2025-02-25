@@ -7,12 +7,14 @@
 public sealed class PlayerController
 {
 	private readonly ILogger _logger;
+	private readonly PlayerFactory _playerFactory;
 	private readonly AccountController _accountController;
 	private readonly PlayerConnectionEvents _playerConnectionEvents;
 
-	public PlayerController(ILogger l, PlayerConnectionEvents pce, AccountController ac)
+	public PlayerController(ILogger l, PlayerFactory pf, PlayerConnectionEvents pce, AccountController ac)
 	{
 		_logger = l.ForThisContext();
+		_playerFactory = pf;
 		_playerConnectionEvents = pce;
 		_accountController = ac;
 		HogWarpSdk.Server.PlayerSystem.PlayerJoinEvent += async p => PlayerJoined(p);
@@ -22,7 +24,7 @@ public sealed class PlayerController
 	#region COLLECTION
 
 	/// <summary>
-	/// Maps HPlayer to PiPlayer
+	/// Maps NativePlayer to PiPlayer
 	/// </summary>
 	public readonly ConcurrentDictionary<NativePlayer, PiPlayer> Players = [];
 
@@ -49,9 +51,9 @@ public sealed class PlayerController
 	{
 		if (Players.TryGetValue(native, out var player))
 			return player;
-		var newPlayer = new PiPlayer(native, acc);
-		Players.TryAdd(native, newPlayer);
-		return newPlayer;
+		player = _playerFactory.Create(native, acc);
+		Players.TryAdd(native, player);
+		return player;
 	}
 
 	/// <summary>
@@ -84,25 +86,34 @@ public sealed class PlayerController
 	{
 		try
 		{
+			if (!native.IsValid())
+			{
+				_logger.Warning("{m} - Player is not valid anymore, aborting connection.",
+					nameof(PlayerJoined));
+				return;
+			}
+
 			// Retrieve discord id or kick if unsuccessful
-			var discordId = PlayerHelper.GetDiscordId(native);
-			if (discordId == 0)
+			var discordId = native.GetDiscordId();
+			if (discordId is null)
 			{
 				_logger.Error(
-					"Failed to determine discord id for player from UniqueId. Id - {id}, ConnectionId - {cid}, UniqueId - {uid} ",
-					native.Id, native.ConnectionId, native.UniqueId);
-				native.Kick();
+					"Failed to determine discord id for player from UniqueId. Id - {id}, ConnectionId - {cid} ",
+					native.Id, native.ConnectionId);
+				if (native.IsValid())
+					native.Kick();
 				return;
 			}
 
 			// Create / retrieve account or kick if unsuccessful
-			var acc = await _accountController.GetOrCreateAccountAsync(discordId);
+			var acc = await _accountController.GetOrCreateAccountAsync((ulong)discordId);
 			if (acc is null)
 			{
 				_logger.Error(
-					"Failed to create or retrieve Account for player. Id - {id} - ConnectionId - {cid}, UniqueId - {uid} ",
-					native.Id, native.ConnectionId, native.UniqueId);
-				native.Kick();
+					"Failed to create or retrieve Account for player. Id - {id} - ConnectionId - {cid} ",
+					native.Id, native.ConnectionId);
+				if (native.IsValid())
+					native.Kick();
 				return;
 			}
 

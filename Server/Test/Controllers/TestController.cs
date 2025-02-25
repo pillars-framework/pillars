@@ -5,9 +5,11 @@ public sealed class TestController
 {
 	private readonly ILogger _logger;
 	private readonly AccountService _accountService;
+	private readonly PiChatActor _piChatActor;
 
-	public TestController(ILogger l, PlayerConnectionEvents pce, AccountService accountService)
+	public TestController(ILogger l, PlayerConnectionEvents pce, AccountService accountService, PiChatActor pica)
 	{
+		_piChatActor = pica;
 		_logger = l.ForThisContext();
 		_accountService = accountService;
 		pce.OnPlayerConnected += OnPlayerConnect;
@@ -16,8 +18,11 @@ public sealed class TestController
 
 	private async Task OnPlayerConnect(PiPlayer player)
 	{
-		_logger.Debug("Player {pid} connected - Account:", player.Id);
-		_logger.Debug("{acc}", JsonSerializer.Serialize(player.Account));
+		_logger.Debug("Player {pid} connected - Connection Id: {cid}", player.Id,
+			player.ConnectionId);
+		await Task.Delay(5_000);
+		_logger.Debug("Sending message");
+		_piChatActor.SendMessageToPlayer(player, "Hello from test");
 	}
 
 	private async Task OnPlayerDisconnect(PiPlayer player)
