@@ -17,5 +17,6 @@ public abstract class PiActor<T> where T : Actor
 	/// <value>
 	/// An instance of type <typeparamref name="T"/> representing the spawned actor in the game world.
 	/// </value>
-	public readonly T WorldActor = HogWarpSdk.Server.World.Spawn<T>() ?? throw new ($"Failed to spawn world actor {nameof(T)}");
+	public readonly T WorldActor = HogWarpSdk.Server.World.Spawn<T>() ??
+	                               throw new ($"Failed to spawn world actor {nameof(T)}");
 }

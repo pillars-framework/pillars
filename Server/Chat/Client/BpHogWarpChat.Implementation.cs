@@ -15,5 +15,5 @@ public sealed partial class BpHogWarpChat
 	/// </summary>
 	/// <param name="player">The player to whom the message is sent.</param>
 	/// <param name="message">The message to send.</param>
-	public partial void SendMsg(HPlayer player, string message) => ParentActor.PlayerMessageReceived(player, message);
+	public partial void SendMsg(NativePlayer player, string message) => ParentActor.PlayerMessageReceived(player, message);
 }

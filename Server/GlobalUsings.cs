@@ -7,7 +7,7 @@ global using HogWarpSdk;
 global using HogWarpSdk.Systems;
 global using HogWarpSdk.Internal;
 global using HogWarpSdk.Game.Types;
-global using HPlayer = HogWarpSdk.Game.Player;
+global using NativePlayer = HogWarpSdk.Game.Player;
 global using Serilog.Sinks.SystemConsole.Themes;
 global using Serilog;
 global using Serilog.Events;

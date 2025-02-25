@@ -2,28 +2,28 @@
 
 public sealed partial class PiPlayer
 {
-    public IPlayer InternalPlayer => Player.InternalPlayer;
-    public void Kick() => Player.Kick();
+	public IPlayer InternalPlayer => Native.InternalPlayer;
+	public void Kick() => Native.Kick();
 
-    public ulong Id => Player.Id;
+	public ulong Id => Native.Id;
 
-    public uint ConnectionId => Player.ConnectionId;
+	public uint ConnectionId => Native.ConnectionId;
 
-    public string UniqueId => Player.UniqueId;
+	public string UniqueId => Native.UniqueId;
 
-    public string Username => Player.Username;
+	public string Username => Native.Username;
 
-    public FVector Position => Player.Position;
+	public FVector Position => Native.Position;
 
-    public float Direction => Player.Direction;
+	public float Direction => Native.Direction;
 
-    public float Speed => Player.Speed;
+	public float Speed => Native.Speed;
 
-    public bool IsInAir => Player.IsInAir;
+	public bool IsInAir => Native.IsInAir;
 
-    public byte House => Player.House;
+	public byte House => Native.House;
 
-    public byte Gender => Player.Gender;
+	public byte Gender => Native.Gender;
 
-    public bool IsMounted => Player.IsMounted;
+	public bool IsMounted => Native.IsMounted;
 }
