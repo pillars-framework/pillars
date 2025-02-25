@@ -12,11 +12,35 @@ public sealed partial class PiPlayer
 	public CHATCHANNEL ActiveChatChannel { get; set; } = CHATCHANNEL.GLOBAL;
 
 	/// <summary>
-	/// Gets or sets the flag if the player has parseltongue enabled
+	/// Flag to indicate if the player has parseltongue enabled
 	/// </summary>
 	/// <remarks>
 	/// All chat messages sent by a player with parseltongue enabled will only
-	/// be able to be viewed correctly by all other players with parseltongue.
+	/// be able to be viewed correctly by all other players with the ability to speak parseltongue.
 	/// </remarks>
 	public bool IsParselEnabled { get; set; }
+
+	/// <summary>
+	/// Internal flag
+	/// </summary>
+	private bool _canSpeakParsel;
+
+	/// <summary>
+	/// Flag to indicate if the player has the ability to speak parseltongue
+	/// </summary>
+	/// <remarks>
+	/// All chat messages sent by a player with parseltongue enabled will only
+	/// be able to be viewed correctly by all other players with the ability to speak parseltongue.
+	/// If disabled, also disables any active parseltongue.
+	/// </remarks>
+	public bool CanSpeakParsel
+	{
+		get => _canSpeakParsel;
+		set
+		{
+			_canSpeakParsel = value;
+			if (!_canSpeakParsel)
+				IsParselEnabled = false;
+		}
+	}
 }
