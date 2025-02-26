@@ -4,14 +4,13 @@
 /// Marks a method as a slash command, associating it with a unique identifier.
 /// </summary>
 /// <remarks>
-/// This attribute is used to define methods that handle slash commands in the application.
-/// The <see cref="Identifier"/> property specifies the command's unique name, which is used to invoke the command.
-///
+/// This attribute is used to define methods that handle slash commands in the application. <br/>
+/// The <see cref="Identifier"/> property specifies the command's unique name, which is used to invoke the command. <br/>
+/// The "/" prefix will be automatically added to the identifier. <br/>
 /// The attribute can only be applied to methods and does not support multiple instances or inheritance.
 /// </remarks>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
 public sealed class SlashCommandAttribute(string identifier) : Attribute
 {
 	public string Identifier { get; set; } = identifier;
-
 }

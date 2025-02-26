@@ -3,13 +3,15 @@
 [RegisterSingleton]
 public sealed class GlobalChatController
 {
+	private readonly ILogger _logger;
 	private readonly PlayerController _playerController;
-	private readonly PiChatActor _piChatActor;
+	private readonly ChatActor _chatActor;
 
-	public GlobalChatController(PlayerController pc, ChatEvents ce, PiChatActor pica)
+	public GlobalChatController(ILogger l, PlayerController pc, ChatEvents ce, ChatActor ca)
 	{
+		_logger = l.ForThisContext();
 		_playerController = pc;
-		_piChatActor = pica;
+		_chatActor = ca;
 		ce.OnChatMessage += OnChatMessage;
 	}
 
@@ -24,10 +26,22 @@ public sealed class GlobalChatController
 	/// </remarks>
 	private async Task OnChatMessage(PiPlayer player, string message)
 	{
-		if (message.StartsWith('/') || player.ActiveChatChannel != CHATCHANNEL.GLOBAL) return;
+		try
+		{
+			if (message.StartsWith('/') || player.ActiveChatChannel != CHATCHANNEL.GLOBAL) return;
 
-		foreach (var targetPlayer in _playerController.Players.Keys)
-			_piChatActor.SendMessageToPlayer(targetPlayer, $"{player.Username}: " + message);
+			var msg = new ChatMessage.Builder()
+				.AddSender(player.Username)
+				.AddText(message)
+				.Build().Message;
+
+			foreach (var targetPlayer in _playerController.Players.Values)
+				_chatActor.SendMessageToPlayer(targetPlayer, msg);
+		}
+		catch (Exception ex)
+		{
+			_logger.Error(ex);
+		}
 	}
 
 	/// <summary>
@@ -38,6 +52,6 @@ public sealed class GlobalChatController
 	public async Task GlobalCommand(PiPlayer player)
 	{
 		player.ActiveChatChannel = CHATCHANNEL.GLOBAL;
-		_piChatActor.SendMessageToPlayer(player.Native, $"You are now talking in {player.ActiveChatChannel}");
+		_chatActor.SendMessageToPlayer(player, $"You are now talking in {player.ActiveChatChannel}");
 	}
 }
