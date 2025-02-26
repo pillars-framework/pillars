@@ -1,16 +1,16 @@
-﻿namespace Pillars.Chat.Models;
+﻿namespace Pillars.Chat.Actors;
 
 [RegisterSingleton]
-public sealed class PiChatActor : PiActor<BpHogWarpChat>
+public sealed class ChatActor : PiActor<BpHogWarpChat>
 {
 	private readonly ChatEvents _chatEvents;
 	private readonly PlayerController _playerController;
 
-	public PiChatActor(ChatEvents ce, PlayerController pc)
+	public ChatActor(ChatEvents ce, PlayerController pc)
 	{
 		_chatEvents = ce;
 		_playerController = pc;
-		WorldActor.ParentActor = this;
+		_worldActor.ParentActor = this;
 	}
 
 	/// <summary>
@@ -18,16 +18,8 @@ public sealed class PiChatActor : PiActor<BpHogWarpChat>
 	/// </summary>
 	/// <param name="player">The player to whom the message is sent.</param>
 	/// <param name="message">The message to send.</param>
-	public async Task SendMessageToPlayer(NativePlayer player, string message) =>
-		WorldActor.RecieveMsg(player, message);
-
-	/// <summary>
-	/// Sends a message to a specific player by forwarding it to the world actor's ReceiveMsg method.
-	/// </summary>
-	/// <param name="player">The player to whom the message is sent.</param>
-	/// <param name="message">The message to send.</param>
 	public async Task SendMessageToPlayer(PiPlayer player, string message) =>
-		WorldActor.RecieveMsg(player.Native, message);
+		_worldActor.RecieveMsg(player.Native, message);
 
 	/// <summary>
 	/// Handles a received message from a player and forwards it to the chat events system.

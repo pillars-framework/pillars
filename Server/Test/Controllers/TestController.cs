@@ -5,11 +5,11 @@ public sealed class TestController
 {
 	private readonly ILogger _logger;
 	private readonly AccountService _accountService;
-	private readonly PiChatActor _piChatActor;
+	private readonly ChatActor _chatActor;
 
-	public TestController(ILogger l, PlayerConnectionEvents pce, AccountService accountService, PiChatActor pica)
+	public TestController(ILogger l, PlayerConnectionEvents pce, AccountService accountService, ChatActor ca)
 	{
-		_piChatActor = pica;
+		_chatActor = ca;
 		_logger = l.ForThisContext();
 		_accountService = accountService;
 		pce.OnPlayerConnected += OnPlayerConnect;
@@ -22,7 +22,7 @@ public sealed class TestController
 			player.ConnectionId);
 		await Task.Delay(5_000);
 		_logger.Debug("Sending message");
-		_piChatActor.SendMessageToPlayer(player, "Hello from test");
+		_chatActor.SendMessageToPlayer(player, "Hello from test");
 	}
 
 	private async Task OnPlayerDisconnect(PiPlayer player)

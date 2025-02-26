@@ -4,14 +4,14 @@
 public sealed class ChatController
 {
 	private readonly ILogger _logger;
-	private readonly PiChatActor _piChatActor;
+	private readonly ChatActor _chatActor;
 	private readonly Dictionary<string, MethodInfo> _registeredCommands = [];
 	private readonly IServiceProvider _serviceProvider;
 
-	public ChatController(ILogger l, ChatEvents ce, PiChatActor pica, IServiceProvider sp)
+	public ChatController(ILogger l, ChatEvents ce, ChatActor ca, IServiceProvider sp)
 	{
 		_logger = l.ForThisContext();
-		_piChatActor = pica;
+		_chatActor = ca;
 		_serviceProvider = sp;
 		ce.OnChatMessage += OnChatMessage;
 		RegisterCommands();
@@ -32,15 +32,51 @@ public sealed class ChatController
 		foreach (var method in Assembly.GetExecutingAssembly().GetTypes()
 			         .SelectMany(t =>
 				         t.GetMethods(BindingFlags.Public | BindingFlags.Instance |
-				                      BindingFlags.Static))
+				                      BindingFlags.Static | BindingFlags.NonPublic))
 			         .Where(m => m.GetCustomAttribute<SlashCommandAttribute>() is not null))
 		{
-			var attribute = method.GetCustomAttribute<SlashCommandAttribute>();
-			_registeredCommands.Add(attribute!.Identifier, method);
+			var attr = method.GetCustomAttribute<SlashCommandAttribute>();
+			if (attr is null) continue;
+			string command = attr.Identifier.ToLower(CultureInfo.CurrentCulture);
+			if (command.StartsWith('/'))
+				throw new InitializationException(typeof(ChatController),
+					$"\"{command} should not start with \"/\"'");
+			if (!HasValidParameters(attr, method))
+				throw new InitializationException(typeof(ChatController),
+					$"\"{command} has invalid parameter declaration'");
+			if (!_registeredCommands.TryAdd(command, method))
+				throw new InitializationException(typeof(ChatController),
+					$"\"{command}\" is already a registered command");
 		}
 
 		_logger.Information("Registered {amount} slash commands", _registeredCommands.Count);
 	}
+
+	/// <summary>
+	/// Checks if the given method info is a valid command registration by checking the attribute. <br/>
+	/// If first argument is not a player, prints a warning.
+	/// Returns true if valid
+	/// </summary>
+	/// <param name="attr"></param>
+	/// <param name="mi"></param>
+	/// <returns></returns>
+	private bool HasValidParameters(SlashCommandAttribute attr, MethodInfo mi)
+	{
+		ParameterInfo[] @params = mi.GetParameters();
+		if (@params.Length == 2 && @params[0].ParameterType == typeof(PiPlayer) &&
+		    @params[1].ParameterType == typeof(string))
+			return true;
+		_logger.Warning(
+			$"Command {attr.Identifier} - The method {mi.Name} of {mi.DeclaringType?.Name} must have PiPlayer as its first and \"string\" as a second parameter!");
+		return false;
+	}
+
+	private readonly CompositeFormat _unknownCommandFormat = CompositeFormat.Parse(
+		new ChatMessage.Builder()
+			.AddSender("Error", CHATTEXTSTYLE.RED)
+			.AddText("Unknown command: {0}")
+			.Build().Message
+	);
 
 	/// <summary>
 	/// Handles incoming chat messages from players and processes them as commands if they start with the '/' prefix.
@@ -63,12 +99,13 @@ public sealed class ChatController
 
 		var identifier = message.Split(' ')[0][1..];
 		if (!_registeredCommands.TryGetValue(identifier, out var command))
-			_piChatActor.SendMessageToPlayer(player.Native, $"The command {identifier} does not exist.");
+			_chatActor.SendMessageToPlayer(player,
+				string.Format(CultureInfo.InvariantCulture, _unknownCommandFormat, $"/{identifier}"));
 		else
 		{
 			var instance = _serviceProvider.GetRequiredService(command.DeclaringType!);
 			if (instance is null) return;
-			command.Invoke(instance, [player]);
+			command.Invoke(instance, [player, message]);
 		}
 	}
 }
