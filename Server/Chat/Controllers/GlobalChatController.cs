@@ -34,14 +34,22 @@ public sealed class GlobalChatController
 				.AddSender(player.Username)
 				.AddText(message)
 				.Build().Message;
-
-			foreach (var targetPlayer in _playerController.Players.Values)
-				_chatActor.SendMessageToPlayer(targetPlayer, msg);
+			SendGlobalMessage(msg);
 		}
 		catch (Exception ex)
 		{
 			_logger.Error(ex);
 		}
+	}
+
+	/// <summary>
+	/// Sends a message to the global channel (all online players)
+	/// </summary>
+	/// <param name="message">The message to send</param>
+	public async Task SendGlobalMessage(string message)
+	{
+		foreach (var targetPlayer in _playerController.Players.Values)
+			_chatActor.SendMessageToPlayer(targetPlayer, message);
 	}
 
 	/// <summary>

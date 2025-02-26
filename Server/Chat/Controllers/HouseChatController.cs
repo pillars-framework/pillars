@@ -37,15 +37,23 @@ public sealed class HouseChatController
 				.AddIcon((CHATICON)player.House)
 				.AddText(message)
 				.Build().Message;
-
-			foreach (var targetPlayer in _playerController.Players.Values.Where(
-				         p => p.House == player.House))
-				_chatActor.SendMessageToPlayer(targetPlayer, msg);
+			SendHouseMessage((HOUSE)player.House, msg);
 		}
 		catch (Exception ex)
 		{
 			_logger.Error(ex);
 		}
+	}
+
+	/// <summary>
+	/// Sends a message to the house channel (all online players of that house
+	/// </summary>
+	/// <param name="house">The house to send the message to</param>
+	/// <param name="message">The message to send</param>
+	public async Task SendHouseMessage(HOUSE house, string message)
+	{
+		foreach (var targetPlayer in _playerController.Players.Values.Where(p => (HOUSE)p.House == house))
+			_chatActor.SendMessageToPlayer(targetPlayer, message);
 	}
 
 	/// <summary>
