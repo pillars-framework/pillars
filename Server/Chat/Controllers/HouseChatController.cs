@@ -52,9 +52,8 @@ public sealed class HouseChatController
 	/// Handles the "/house" slash command, which switches the player's active chat channel to the house channel.
 	/// </summary>
 	/// <param name="player">The player who executed the command.</param>
-	/// <param name="_"></param>
 	[SlashCommand("house")]
-	private async Task HouseCommand(PiPlayer player, string _)
+	private async Task HouseCommand(PiPlayer player)
 	{
 		player.ActiveChatChannel = CHATCHANNEL.HOUSE;
 		_chatActor.SendMessageToPlayer(player, $"You are now talking in {player.ActiveChatChannel}");

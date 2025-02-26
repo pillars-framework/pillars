@@ -48,9 +48,8 @@ public sealed class GlobalChatController
 	/// Handles the "/global" slash command, which switches the player's active chat channel to the global channel.
 	/// </summary>
 	/// <param name="player">The player who executed the command.</param>
-	/// <param name="_"></param>
 	[SlashCommand("global")]
-	public async Task GlobalCommand(PiPlayer player, string _)
+	public async Task GlobalCommand(PiPlayer player)
 	{
 		player.ActiveChatChannel = CHATCHANNEL.GLOBAL;
 		_chatActor.SendMessageToPlayer(player, $"You are now talking in {player.ActiveChatChannel}");

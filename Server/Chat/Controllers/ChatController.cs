@@ -40,13 +40,13 @@ public sealed class ChatController
 			string command = attr.Identifier.ToLower(CultureInfo.CurrentCulture);
 			if (command.StartsWith('/'))
 				throw new InitializationException(typeof(ChatController),
-					$"\"{command} should not start with \"/\"'");
+					$"Command \"{command}\" should not start with \"/\"'");
 			if (!HasValidParameters(attr, method))
 				throw new InitializationException(typeof(ChatController),
-					$"\"{command} has invalid parameter declaration'");
+					$"Command \"{command}\" has invalid parameter declaration'");
 			if (!_registeredCommands.TryAdd(command, method))
 				throw new InitializationException(typeof(ChatController),
-					$"\"{command}\" is already a registered command");
+					$"Command \"{command}\" is already a registered command");
 		}
 
 		_logger.Information("Registered {amount} slash commands", _registeredCommands.Count);
@@ -63,11 +63,18 @@ public sealed class ChatController
 	private bool HasValidParameters(SlashCommandAttribute attr, MethodInfo mi)
 	{
 		ParameterInfo[] @params = mi.GetParameters();
-		if (@params.Length == 2 && @params[0].ParameterType == typeof(PiPlayer) &&
-		    @params[1].ParameterType == typeof(string))
-			return true;
+		// Check if first param is player
+		if (@params.Length >= 1 && @params[0].ParameterType == typeof(PiPlayer))
+			switch (@params.Length)
+			{
+				case 1:
+				// Check if optional second param is string[]
+				case 2 when @params[1].ParameterType == typeof(string[]):
+					return true;
+			}
+
 		_logger.Warning(
-			$"Command {attr.Identifier} - The method {mi.Name} of {mi.DeclaringType?.Name} must have PiPlayer as its first and \"string\" as a second parameter!");
+			$"Command {attr.Identifier} - The method {mi.Name} of {mi.DeclaringType?.Name} must have PiPlayer as its first and optional \"string[]\" as a second parameter!");
 		return false;
 	}
 
@@ -95,17 +102,34 @@ public sealed class ChatController
 	/// </remarks>
 	private async Task OnChatMessage(PiPlayer player, string message)
 	{
-		if (!message.StartsWith('/')) return;
-
-		var identifier = message.Split(' ')[0][1..];
-		if (!_registeredCommands.TryGetValue(identifier, out var command))
-			_chatActor.SendMessageToPlayer(player,
-				string.Format(CultureInfo.InvariantCulture, _unknownCommandFormat, $"/{identifier}"));
-		else
+		try
 		{
+			if (!message.StartsWith('/')) return;
+
+			var identifier = message.Split(' ')[0][1..];
+			if (!_registeredCommands.TryGetValue(identifier, out var command))
+			{
+				_chatActor.SendMessageToPlayer(player,
+					string.Format(CultureInfo.InvariantCulture, _unknownCommandFormat,
+						$"/{identifier}"));
+				return;
+			}
+
 			var instance = _serviceProvider.GetRequiredService(command.DeclaringType!);
 			if (instance is null) return;
-			command.Invoke(instance, [player, message]);
+			// Dynamically invoke based on param length
+			var paramLength = command.GetParameters().Length;
+			if (paramLength == 1)
+				command.Invoke(instance, [player]);
+			else
+			{
+				string[] args = message.Split(' ').Skip(1).ToArray();
+				command.Invoke(instance, [player, args]);
+			}
+		}
+		catch (Exception ex)
+		{
+			_logger.Error(ex);
 		}
 	}
 }
