@@ -1,17 +1,12 @@
 namespace Pillars.Schedules.Models;
 
 [Collection("schedule_history")]
-public sealed class ScheduleHistory : Entity
+public sealed class ScheduleHistory : Entity, ICreatedOn
 {
 	/// <summary>
 	/// The schedule for this history entry.
 	/// </summary>
 	public SCHEDULE ScheduleId { get; set; }
-
-	/// <summary>
-	/// Creation Date.
-	/// </summary>
-	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 	/// <summary>
 	/// Reason why the schedule was triggered.
@@ -22,4 +17,6 @@ public sealed class ScheduleHistory : Entity
 	/// If the schedule was successfully performed.
 	/// </summary>
 	public bool Success { get; set; } = true;
+
+	public DateTime CreatedOn { get; set; }
 }

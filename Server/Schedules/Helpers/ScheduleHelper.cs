@@ -7,7 +7,7 @@ public static class ScheduleHelper
 {
 	/// <summary>
 	/// For a given cronexpression, checks if a "next occurence" exists.
-	/// If not, the expression is invalid
+	/// If not, the expression is invalid.
 	/// </summary>
 	public static bool IsValidCronExpression(CronExpression cronExp) =>
 		cronExp.GetNextOccurrence(DateTimeOffset.Now, TimeZoneInfo.Local) != null;
@@ -15,9 +15,8 @@ public static class ScheduleHelper
 	/// <summary>
 	/// Calculates the number of occurences that should have happened between
 	/// the since and now based on the cron expression.
-	///
-	/// [IMPORTANT] Excludes the boundaries !
 	/// </summary>
+	/// <remarks>Excludes the boundaries !</remarks>
 	public static int OccurrencesSince(CronExpression cronExp, DateTime since) =>
 		cronExp.GetOccurrences(since, DateTimeOffset.Now, TimeZoneInfo.Local, false, false).Count();
 
@@ -29,7 +28,9 @@ public static class ScheduleHelper
 	{
 		if (!cycle.HasHistory || cycle.LastTrigger == null) return 0;
 		// Calculates minutes since history
-		var msSinceHistory = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - ((DateTimeOffset)cycle.LastTrigger.Value).ToUnixTimeMilliseconds();
+		var msSinceHistory = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
+		                     ((DateTimeOffset)cycle.LastTrigger.Value).ToUnixTimeMilliseconds();
+		// ReSharper disable once PossibleLossOfFraction
 		var minutesSinceHistory = Math.Floor((double)(msSinceHistory / (60 * 1000)));
 		// Adjust for already elapsed
 		minutesSinceHistory -= cycle.CycleTracker.ElapsedMinutes;

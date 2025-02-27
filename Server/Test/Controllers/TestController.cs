@@ -30,6 +30,7 @@ public sealed class TestController
 		_logger.Debug("Player {pid} left", player.Id);
 	}
 
+	/*
 	[Cycle(CYCLE.TEST, 1, false, CATCHUP.ALL)]
 	public async Task<bool> TestCycle()
 	{
@@ -43,4 +44,5 @@ public sealed class TestController
 		_logger.Information("Testing schedule triggered!");
 		return true;
 	}
+	*/
 }
