@@ -6,6 +6,7 @@ public sealed class ScheduleService(ILogger logger)
 	private readonly ILogger _logger = logger.ForThisContext();
 
 	#region SCHEDULE
+
 	/// <summary>
 	/// Performs a lookup over the assembly to check for all [Schedule] attributes.
 	/// Also loads the latest history entry for all schedule
@@ -17,13 +18,13 @@ public sealed class ScheduleService(ILogger logger)
 		var histories = await LoadLatestHistoryForEachSchedule();
 
 		var methods = AppDomain.CurrentDomain.GetAssemblies()
-				.SelectMany(x => x.GetTypes())
-				.Where(x => x.IsClass)
-				.SelectMany(x => x.GetMethods())
-				.Where(x => x.GetCustomAttributes(typeof(ScheduleAttribute), false).FirstOrDefault() != null)
-				.ToList();
+			.SelectMany(x => x.GetTypes())
+			.Where(x => x.IsClass)
+			.SelectMany(x => x.GetMethods())
+			.Where(x => x.GetCustomAttributes(typeof(ScheduleAttribute), false).FirstOrDefault() != null)
+			.ToList();
 
-		foreach(var mi in methods)
+		foreach (var mi in methods)
 		{
 			var attr = (ScheduleAttribute?)Attribute.GetCustomAttribute(mi, typeof(ScheduleAttribute));
 			if (attr == null) continue;
@@ -32,17 +33,21 @@ public sealed class ScheduleService(ILogger logger)
 			else if (string.IsNullOrEmpty(attr.CronExp))
 				throw new ArgumentException($"Schedule {attr.Id} does not provide a cron expression!");
 			else if (!CronExpression.TryParse(attr.CronExp, out CronExpression cron))
-				throw new ArgumentException($"Schedule {attr.Id} does not provide a valid cron expression!");
+				throw new ArgumentException(
+					$"Schedule {attr.Id} does not provide a valid cron expression!");
 			else if (!ScheduleHelper.IsValidCronExpression(cron))
-				throw new ArgumentException($"Schedule {attr.Id} does not provide a valid cron expression for a next iterator!");
+				throw new ArgumentException(
+					$"Schedule {attr.Id} does not provide a valid cron expression for a next iterator!");
 			else if (!(mi.ReturnType == typeof(bool) || mi.ReturnType == typeof(Task<bool>)))
-				throw new Exception($"Schedule {attr.Id} does not return a Task<bool> or bool as a result!");
+				throw new Exception(
+					$"Schedule {attr.Id} does not return a Task<bool> or bool as a result!");
 			else
 			{
 				var lastHistory = histories.FirstOrDefault((h) => h.ScheduleId == attr.Id);
-				Schedule schedule = new(attr, cron, mi, lastHistory?.CreatedAt);
+				Schedule schedule = new(attr, cron, mi, lastHistory?.CreatedOn);
 				if (!schedules.TryAdd(attr.Id, schedule))
-					throw new ArgumentException($"Schedule {attr.Id} is already a registered schedule!");
+					throw new ArgumentException(
+						$"Schedule {attr.Id} is already a registered schedule!");
 			}
 		}
 
@@ -53,14 +58,15 @@ public sealed class ScheduleService(ILogger logger)
 	/// Loads the latest history entries for each existing schedule
 	/// in the database. Returns a list containing all latest schedule histories
 	/// </summary>
-	private async Task<List<ScheduleHistory>> LoadLatestHistoryForEachSchedule() => await DB.Collection<ScheduleHistory>()
+	private async Task<List<ScheduleHistory>> LoadLatestHistoryForEachSchedule() => await DB
+		.Collection<ScheduleHistory>()
 		.Aggregate()
 		.Group(
 			h => h.ScheduleId, // Group by ScheduleId
 			g => new
 			{
 				Id = g.Key,
-				LatestHistory = g.OrderByDescending(h => h.CreatedAt).First() // Get the latest entry
+				LatestHistory = g.OrderByDescending(h => h.CreatedOn).First() // Get the latest entry
 			}
 		)
 		.Project(g => g.LatestHistory) // Extract only the latest entry from each group
@@ -75,8 +81,7 @@ public sealed class ScheduleService(ILogger logger)
 		{
 			ScheduleId = schedule.Info.Id,
 			Reason = reason,
-			Success = successful,
-			CreatedAt = DateTime.UtcNow
+			Success = successful
 		};
 
 		try
@@ -90,9 +95,11 @@ public sealed class ScheduleService(ILogger logger)
 			return history;
 		}
 	}
+
 	#endregion
 
 	#region CYCLE
+
 	/// <summary>
 	/// Performs a lookup over the assembly to check for all [Cycle] attributes.
 	/// Also loads the latest history entry for all cycles
@@ -105,13 +112,13 @@ public sealed class ScheduleService(ILogger logger)
 		var trackers = await LoadCycleTrackers();
 
 		var methods = AppDomain.CurrentDomain.GetAssemblies()
-				.SelectMany(x => x.GetTypes())
-				.Where(x => x.IsClass)
-				.SelectMany(x => x.GetMethods())
-				.Where(x => x.GetCustomAttributes(typeof(CycleAttribute), false).FirstOrDefault() != null)
-				.ToList();
+			.SelectMany(x => x.GetTypes())
+			.Where(x => x.IsClass)
+			.SelectMany(x => x.GetMethods())
+			.Where(x => x.GetCustomAttributes(typeof(CycleAttribute), false).FirstOrDefault() != null)
+			.ToList();
 
-		foreach(var mi in methods)
+		foreach (var mi in methods)
 		{
 			var attr = (CycleAttribute?)Attribute.GetCustomAttribute(mi, typeof(CycleAttribute));
 			if (attr == null) continue;
@@ -120,13 +127,14 @@ public sealed class ScheduleService(ILogger logger)
 			else if (attr.CycleTime < 1)
 				throw new ArgumentException($"Cycle {attr.Id} has unsupported cycletime (< 1) !");
 			else if (!(mi.ReturnType == typeof(bool) || mi.ReturnType == typeof(Task<bool>)))
-				throw new Exception($"Cycle {attr.Id} does not return a Task<bool> or bool as a result!");
+				throw new Exception(
+					$"Cycle {attr.Id} does not return a Task<bool> or bool as a result!");
 			else
 			{
 				var tracker = trackers.FirstOrDefault((ct) => ct.CycleId == attr.Id);
 				tracker ??= await CreateCycleTracker(attr.Id);
 				var lastHistory = histories.FirstOrDefault((h) => h.CycleId == attr.Id);
-				Cycle cycle = new(attr, mi, tracker, lastHistory?.CreatedAt);
+				Cycle cycle = new(attr, mi, tracker, lastHistory?.CreatedOn);
 				if (!cycles.TryAdd(attr.Id, cycle))
 					throw new ArgumentException($"Cycle {attr.Id} is already a registered cycle!");
 			}
@@ -146,7 +154,7 @@ public sealed class ScheduleService(ILogger logger)
 			g => new
 			{
 				Id = g.Key,
-				LatestHistory = g.OrderByDescending(h => h.CreatedAt).First() // Get the latest entry
+				LatestHistory = g.OrderByDescending(h => h.CreatedOn).First() // Get the latest entry
 			}
 		)
 		.Project(g => g.LatestHistory) // Extract only the latest entry from each group
@@ -157,11 +165,11 @@ public sealed class ScheduleService(ILogger logger)
 	/// </summary>
 	public async Task<CycleHistory> CreateCycleHistory(Cycle cycle, string reason, bool successful)
 	{
-		CycleHistory history = new(){
+		CycleHistory history = new()
+		{
 			CycleId = cycle.Info.Id,
 			Reason = reason,
-			Success = successful,
-			CreatedAt = DateTime.UtcNow
+			Success = successful
 		};
 		try
 		{
@@ -210,5 +218,6 @@ public sealed class ScheduleService(ILogger logger)
 	/// Mainly used to update the elapsed minutes
 	/// </summary>
 	public async Task UpdateCycleTrackers(List<CycleTracker> cycleTrackers) => await DB.SaveAsync(cycleTrackers);
+
 	#endregion
 }

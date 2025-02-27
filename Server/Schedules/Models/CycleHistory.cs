@@ -1,17 +1,12 @@
 namespace Pillars.Schedules.Models;
 
 [Collection("cycle_history")]
-public sealed class CycleHistory : Entity
+public sealed class CycleHistory : Entity, ICreatedOn
 {
 	/// <summary>
 	/// The cycle for this history entry.
 	/// </summary>
 	public CYCLE CycleId { get; set; }
-
-	/// <summary>
-	/// Creation Date.
-	/// </summary>
-	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 	/// <summary>
 	/// Reason why the cycle was triggered.
@@ -22,4 +17,6 @@ public sealed class CycleHistory : Entity
 	/// If the cycle was successfully performed.
 	/// </summary>
 	public bool Success { get; set; } = true;
+
+	public DateTime CreatedOn { get; set; }
 }
