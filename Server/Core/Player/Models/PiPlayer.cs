@@ -6,6 +6,12 @@ public sealed partial class PiPlayer(ILogger l, NativePlayer native, Account acc
 	private readonly ILogger _logger = l.ForThisContext();
 
 	/// <summary>
+	/// When the player joined / was created.
+	/// </summary>
+	/// <remarks>Based on UTC</remarks>
+	public readonly DateTime OnlineSince = DateTime.UtcNow;
+
+	/// <summary>
 	/// Flag to indicate if the player object is valid / invalid
 	/// </summary>
 	public bool IsValid => Native.IsValid();

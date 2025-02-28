@@ -4,6 +4,7 @@
 public sealed class ChatEvents
 {
 	#region CLIENT MESSAGE
+
 	/// <summary>
 	/// Represents a delegate for handling chat message events.
 	/// </summary>
@@ -26,5 +27,6 @@ public sealed class ChatEvents
 	/// </remarks>
 	public void ChatMessage(PiPlayer player, string message) =>
 		OnChatMessage?.Invoke(player, message);
+
 	#endregion
 }
