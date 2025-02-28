@@ -58,3 +58,7 @@ global using Pillars.Schedules.Helpers;
 global using Pillars.Schedules.Models;
 global using Pillars.Schedules.Services;
 global using MongoDB.Bson.Serialization.Attributes;
+global using Pillars.Weather.Actors;
+global using Pillars.Weather.Events;
+global using Pillars.Weather.Data;
+
