@@ -50,11 +50,8 @@ public sealed class HouseChatController
 	/// </summary>
 	/// <param name="house">The house to send the message to</param>
 	/// <param name="message">The message to send</param>
-	public async Task SendHouseMessage(HOUSE house, string message)
-	{
-		foreach (var targetPlayer in _playerController.Players.Values.Where(p => (HOUSE)p.House == house))
-			_chatActor.SendMessageToPlayer(targetPlayer, message);
-	}
+	public async Task SendHouseMessage(HOUSE house, string message) =>
+		_chatActor.SendMessage(_playerController.Players.Values.Where(p => (HOUSE)p.House == house), message);
 
 	/// <summary>
 	/// Handles the "/house" slash command, which switches the player's active chat channel to the house channel.
@@ -64,6 +61,6 @@ public sealed class HouseChatController
 	private async Task HouseCommand(PiPlayer player)
 	{
 		player.ActiveChatChannel = CHATCHANNEL.HOUSE;
-		_chatActor.SendMessageToPlayer(player, $"You are now talking in {player.ActiveChatChannel}");
+		_chatActor.SendMessage(player, $"You are now talking in {player.ActiveChatChannel}");
 	}
 }

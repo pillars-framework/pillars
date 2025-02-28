@@ -22,7 +22,7 @@ public sealed class TestController
 			player.ConnectionId);
 		await Task.Delay(5_000);
 		_logger.Debug("Sending message");
-		_chatActor.SendMessageToPlayer(player, "Hello from test");
+		_chatActor.SendMessage(player, "Hello from test");
 	}
 
 	private async Task OnPlayerDisconnect(PiPlayer player)

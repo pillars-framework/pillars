@@ -34,22 +34,12 @@ public sealed class GlobalChatController
 				.AddSender(player.Username)
 				.AddText(message)
 				.Build().Message;
-			SendGlobalMessage(msg);
+			_chatActor.BroadcastMessage(msg);
 		}
 		catch (Exception ex)
 		{
 			_logger.Error(ex);
 		}
-	}
-
-	/// <summary>
-	/// Sends a message to the global channel (all online players)
-	/// </summary>
-	/// <param name="message">The message to send</param>
-	public async Task SendGlobalMessage(string message)
-	{
-		foreach (var targetPlayer in _playerController.Players.Values)
-			_chatActor.SendMessageToPlayer(targetPlayer, message);
 	}
 
 	/// <summary>
@@ -60,6 +50,6 @@ public sealed class GlobalChatController
 	public async Task GlobalCommand(PiPlayer player)
 	{
 		player.ActiveChatChannel = CHATCHANNEL.GLOBAL;
-		_chatActor.SendMessageToPlayer(player, $"You are now talking in {player.ActiveChatChannel}");
+		_chatActor.SendMessage(player, $"You are now talking in {player.ActiveChatChannel}");
 	}
 }

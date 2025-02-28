@@ -109,7 +109,7 @@ public sealed class ChatController
 			var identifier = message.Split(' ')[0][1..];
 			if (!_registeredCommands.TryGetValue(identifier, out var command))
 			{
-				_chatActor.SendMessageToPlayer(player,
+				_chatActor.SendMessage(player,
 					string.Format(CultureInfo.InvariantCulture, _unknownCommandFormat,
 						$"/{identifier}"));
 				return;
