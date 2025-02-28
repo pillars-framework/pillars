@@ -11,7 +11,7 @@ public sealed partial class BpHogWarpWeather
 	public required WeatherActor ParentActor { get; set; }
 
 	/// <summary>
-	/// Sends a weather update to the specified player.
+	/// Sends a weather update request.
 	/// </summary>
 	/// <param name="player">The player to whom the weather update is sent.</param>
 	/// <param name="weather">The string representation of the weather to apply.</param>
@@ -19,7 +19,7 @@ public sealed partial class BpHogWarpWeather
 		=> ParentActor.WeatherChanged(weather);
 
 	/// <summary>
-	/// Sends a season update to the specified player.
+	/// Sends a season update request.
 	/// </summary>
 	/// <param name="player">The player to whom the season update is sent.</param>
 	/// <param name="season">The integer value representing the season to apply.</param>
@@ -27,7 +27,7 @@ public sealed partial class BpHogWarpWeather
 		=> ParentActor.SeasonChanged(season);
 
 	/// <summary>
-	/// Sends a time update to the specified player.
+	/// Sends a time update request.
 	/// </summary>
 	/// <param name="player">The player to whom the time update is sent.</param>
 	/// <param name="hour">The hour component of the new time (0-23).</param>
