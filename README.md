@@ -15,15 +15,9 @@
 
 We created an extensive [documentation](https://pillars-framework.github.io/docs/). You'll find everything you need there.
 
-## Roadmap 🏁
-- [ ] An integrated Admin Control Panel, with easy to extend behavior
-- [ ] Voice Integration
-- [ ] Houses
-  - [ ] Point Tracker
-  - [ ] Representatives
-- [ ] Character
-  - [ ] Inventory
-  - [ ] Clothing / Equipment
-  - [ ] House Association
-- [ ] Spells
-  - [ ] Grant Spell / Revoke Spell / RegisterCustomSpell
+## Quick Setup
+
+1. Clone the repo
+2. Install [.NET8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0), [MongoDB](https://www.mongodb.com/try/download/community), [HogWarp](https://hogwarp.com/)
+3. **Clone / Copy** all `.template` files and remove the `.template` suffix, and adjust them as needed
+4. Build & Run `Server.Loader.exe`
