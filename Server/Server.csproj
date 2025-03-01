@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Update="appsettings.json">
+		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>..\..\appsettings.json</TargetPath>
 		</Content>
@@ -30,7 +30,7 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<Content Update="Core\Logging\loggersettings.json">
+		<Content Include="Core\Logging\loggersettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>..\..\loggersettings.json</TargetPath>
 		</Content>
