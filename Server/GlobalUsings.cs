@@ -61,4 +61,5 @@ global using MongoDB.Bson.Serialization.Attributes;
 global using Pillars.Weather.Actors;
 global using Pillars.Weather.Events;
 global using Pillars.Weather.Data;
-
+global using Pillars.Notifications.Actors;
+global using Pillars.Notifications.Data;

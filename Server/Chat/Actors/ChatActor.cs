@@ -24,7 +24,7 @@ public sealed class ChatActor : PiActor<BpHogWarpChat>
 		_worldActor.RecieveMsg(target.Native, message);
 
 	/// <summary>
-	/// Sends a message to a set oof players by forwarding it to the world actor's ReceiveMsg method.
+	/// Sends a message to a set of players by forwarding it to the world actor's ReceiveMsg method.
 	/// </summary>
 	/// <param name="targets">The players to whom the message is sent.</param>
 	/// <param name="message">The message to send.</param>
