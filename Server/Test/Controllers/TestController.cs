@@ -6,10 +6,13 @@ public sealed class TestController
 	private readonly ILogger _logger;
 	private readonly AccountService _accountService;
 	private readonly ChatActor _chatActor;
+	private readonly NotificationActor _notificationActor;
 
-	public TestController(ILogger l, PlayerConnectionEvents pce, AccountService accountService, ChatActor ca)
+	public TestController(ILogger l, PlayerConnectionEvents pce, AccountService accountService, ChatActor ca,
+		NotificationActor na)
 	{
 		_chatActor = ca;
+		_notificationActor = na;
 		_logger = l.ForThisContext();
 		_accountService = accountService;
 		pce.OnPlayerConnected += OnPlayerConnect;
@@ -28,6 +31,25 @@ public sealed class TestController
 	private async Task OnPlayerDisconnect(PiPlayer player)
 	{
 		_logger.Debug("Player {pid} left", player.Id);
+	}
+
+	[SlashCommand("notify")]
+	private async Task TestNotification(PiPlayer player, string[] args)
+	{
+		_logger.Information("Testing notification with args: {a}", JsonSerializer.Serialize(args));
+		if (args.Length <= 3)
+			_notificationActor.Notify(player, NOTIFICATIONICON.UI_T_GENERICERROR,
+				"Invalid number of arguments",
+				"Expected at least 3 arguments");
+		else if (!int.TryParse(args[0], out int iconIdx))
+			_notificationActor.Notify(player, NOTIFICATIONICON.UI_T_GENERICERROR, "Invalid icon",
+				$"\"{args[0]}\" is not a valid icon");
+		else
+		{
+			string title = args[1];
+			string message = string.Join(" ", args[2..]);
+			_notificationActor.Notify(player, iconIdx, title, message);
+		}
 	}
 
 	/*

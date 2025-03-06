@@ -8,7 +8,7 @@
 /// This class is responsible for spawning an instance of the specified actor type (<typeparamref name="T"/>) in the game world.
 /// If the actor cannot be spawned, an exception is thrown.
 /// </remarks>
-/// <exception cref="System.Exception">Thrown when the actor fails to spawn in the game world.</exception>
+/// <exception cref="InitializationException">Thrown when the actor fails to spawn in the game world.</exception>
 public abstract class PiActor<T> where T : Actor
 {
 	/// <summary>
