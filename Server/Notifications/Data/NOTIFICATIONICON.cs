@@ -1,5 +1,8 @@
 ﻿namespace Pillars.Notifications.Data;
 
+/// <summary>
+/// An enum for determining notification icons.
+/// </summary>
 public enum NOTIFICATIONICON
 {
 	UI_T_BEAST_NONE = 0,
