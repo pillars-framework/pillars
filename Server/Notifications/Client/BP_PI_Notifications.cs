@@ -10,8 +10,8 @@ using HogWarpSdk.Internal;
 
 namespace HogWarp.Replicated
 {
-    [Replicated(Class = "/Notifications/Actors/BpNotification.BpNotification", Hash = 13084089758305893838)]
-    public partial class BpNotification : Actor
+    [Replicated(Class = "/PiNotifications/Actors/BP_PI_Notifications.BP_PI_Notifications", Hash = 4907751509687132419)]
+    public partial class BpPiNotifications : Actor
     {
         [ClientRpc(Function = "TriggerNotification", Hash = 16932435715196875644)]
         public void TriggerNotification(Player player, int iconIdx, string title, string message, float duration)
@@ -24,8 +24,8 @@ namespace HogWarp.Replicated
                 data.WriteString(title);
                 data.WriteString(message);
                 data.WriteFloat(duration);
-                
-                IRpc.Get().Call(player.InternalPlayer, Id, 13084089758305893838, 16932435715196875644, data);
+
+                IRpc.Get().Call(player.InternalPlayer, Id, 4907751509687132419, 16932435715196875644, data);
             }
             finally
             {

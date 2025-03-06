@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "Notifications",
+	"FriendlyName": "PiNotifications",
 	"Description": "",
 	"Category": "UGC",
 	"CreatedBy": "Pillars",
@@ -11,5 +11,8 @@
 	"MarketplaceURL": "",
 	"SupportURL": "",
 	"SDKVersion": 1344202,
-	"CanContainContent": true
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false
 }

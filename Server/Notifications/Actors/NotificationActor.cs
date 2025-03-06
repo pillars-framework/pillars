@@ -1,7 +1,7 @@
 ﻿namespace Pillars.Notifications.Actors;
 
 [RegisterSingleton]
-public sealed class NotificationActor : PiActor<BpNotification>
+public sealed class NotificationActor : PiActor<BpPiNotifications>
 {
 	/// <summary>
 	/// Notifies a set of player
