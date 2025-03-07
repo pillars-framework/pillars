@@ -120,10 +120,18 @@ public sealed class ChatController
 			// Dynamically invoke based on param length
 			var paramLength = command.GetParameters().Length;
 			if (paramLength == 1)
+			{
+				_logger.Debug("Player #{pid} - {usr} - {did} invoked command {cmd}", player.Id,
+					player.Username, player.DiscordId, $"/{identifier}");
 				command.Invoke(instance, [player]);
+			}
 			else
 			{
 				string[] args = message.Split(' ').Skip(1).ToArray();
+				_logger.Debug("Player #{pid} - {usr} - {did} invoked command {cmd} - args: {args}",
+					player.Id,
+					player.Username, player.DiscordId, $"/{identifier}",
+					JsonSerializer.Serialize(args));
 				command.Invoke(instance, [player, args]);
 			}
 		}
