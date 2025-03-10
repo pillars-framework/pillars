@@ -2,5 +2,5 @@
 
 public sealed partial class PiPlayer
 {
-	public Account Account { get; private set; } = acc;
+	public string AccountId { get; set; } = acc.ID;
 }
