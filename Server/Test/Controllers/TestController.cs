@@ -36,7 +36,6 @@ public sealed class TestController
 	[SlashCommand("notify")]
 	private async Task TestNotification(PiPlayer player, string[] args)
 	{
-		_logger.Information("Testing notification with args: {a}", JsonSerializer.Serialize(args));
 		if (args.Length <= 3)
 			_notificationActor.Notify(player, NOTIFICATIONICON.UI_T_GENERICERROR,
 				"Invalid number of arguments",
@@ -50,6 +49,29 @@ public sealed class TestController
 			string message = string.Join(" ", args[2..]);
 			_notificationActor.Notify(player, iconIdx, title, message);
 		}
+	}
+
+	[SlashCommand("chat")]
+	private async Task TestChat(PiPlayer player, string[] args)
+	{
+		var builder = new ChatMessage.Builder();
+		builder.AddIcon(CHATICON.GRYFFINDOR);
+		builder.AddText("Default ", CHATTEXTSTYLE.DEFAULT);
+		builder.AddText("Gryffindor ", CHATTEXTSTYLE.GRYFFINDOR);
+		builder.AddText("Hufflepuff ", CHATTEXTSTYLE.HUFFLEPUFF);
+		builder.AddText("Ravenclaw ", CHATTEXTSTYLE.RAVENCLAW);
+		builder.AddText("Slytherin ", CHATTEXTSTYLE.SLYTHERIN);
+		builder.AddText("Admin ", CHATTEXTSTYLE.ADMIN);
+		builder.AddText("Dev ", CHATTEXTSTYLE.DEV);
+		builder.AddText("Server ", CHATTEXTSTYLE.SERVER);
+		builder.AddText("Red ", CHATTEXTSTYLE.RED);
+		builder.AddText("Blue ", CHATTEXTSTYLE.BLUE);
+		builder.AddText("Green ", CHATTEXTSTYLE.GREEN);
+		builder.AddText("Yellow ", CHATTEXTSTYLE.YELLOW);
+		builder.AddText("Magenta ", CHATTEXTSTYLE.MAGENTA);
+		builder.AddText("Cyan ", CHATTEXTSTYLE.CYAN);
+		builder.AddSender(player.Username, CHATTEXTSTYLE.SERVER);
+		_chatActor.SendMessage(player, builder.Build().Message);
 	}
 
 	/*

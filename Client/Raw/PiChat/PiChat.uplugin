@@ -11,8 +11,5 @@
 	"MarketplaceURL": "",
 	"SupportURL": "",
 	"SDKVersion": 1344202,
-	"CanContainContent": true,
-	"IsBetaVersion": false,
-	"IsExperimentalVersion": false,
-	"Installed": false
+	"CanContainContent": true
 }
