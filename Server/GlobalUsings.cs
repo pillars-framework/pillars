@@ -63,3 +63,4 @@ global using Pillars.Weather.Events;
 global using Pillars.Weather.Data;
 global using Pillars.Notifications.Actors;
 global using Pillars.Notifications.Data;
+global using Pillars.Chat.Services;

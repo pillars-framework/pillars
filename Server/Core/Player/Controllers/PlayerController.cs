@@ -120,7 +120,7 @@ public sealed class PlayerController
 			// Create player and dispatch event
 			var player = CreatePlayer(native, acc);
 			_logger.Information("New player connect. AccountId - {aid}, DiscordId - {did}",
-				player.Account.ID, discordId);
+				player.AccountId, discordId);
 			_playerConnectionEvents.PlayerConnected(player);
 		}
 		catch (Exception ex)

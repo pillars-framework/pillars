@@ -7,15 +7,25 @@ public sealed class ChatController
 	private readonly ChatActor _chatActor;
 	private readonly Dictionary<string, MethodInfo> _registeredCommands = [];
 	private readonly IServiceProvider _serviceProvider;
+	private readonly ChatService _chatService;
 
-	public ChatController(ILogger l, ChatEvents ce, ChatActor ca, IServiceProvider sp)
+	public ChatController(ILogger l, ChatEvents ce, ChatActor ca, ChatService cs, PlayerConnectionEvents pce,
+		IServiceProvider sp)
 	{
 		_logger = l.ForThisContext();
 		_chatActor = ca;
 		_serviceProvider = sp;
+		_chatService = cs;
 		ce.OnChatMessage += OnChatMessage;
+		pce.OnPlayerConnected += OnPlayerConnect;
 		RegisterCommands();
 	}
+
+	private async Task OnPlayerConnect(PiPlayer player) =>
+		_chatActor.InitializeChat(player,
+			await _chatService.GetSettingsForAccountIdAsync(player.AccountId));
+
+	#region COMMANDS
 
 	/// <summary>
 	/// Scans the current assembly for types decorated with the <see cref="SlashCommandAttribute"/>
@@ -116,14 +126,23 @@ public sealed class ChatController
 			}
 
 			var instance = _serviceProvider.GetRequiredService(command.DeclaringType!);
+			// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 			if (instance is null) return;
 			// Dynamically invoke based on param length
 			var paramLength = command.GetParameters().Length;
 			if (paramLength == 1)
+			{
+				_logger.Debug("Player #{pid} - {usr} - {did} invoked command {cmd}", player.Id,
+					player.Username, player.DiscordId, $"/{identifier}");
 				command.Invoke(instance, [player]);
+			}
 			else
 			{
 				string[] args = message.Split(' ').Skip(1).ToArray();
+				_logger.Debug("Player #{pid} - {usr} - {did} invoked command {cmd} - args: {args}",
+					player.Id,
+					player.Username, player.DiscordId, $"/{identifier}",
+					JsonSerializer.Serialize(args));
 				command.Invoke(instance, [player, args]);
 			}
 		}
@@ -132,4 +151,6 @@ public sealed class ChatController
 			_logger.Error(ex);
 		}
 	}
+
+	#endregion
 }
