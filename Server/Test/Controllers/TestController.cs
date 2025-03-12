@@ -7,12 +7,14 @@ public sealed class TestController
 	private readonly AccountService _accountService;
 	private readonly ChatActor _chatActor;
 	private readonly NotificationActor _notificationActor;
+	private readonly DialogActor _dialogActor;
 
 	public TestController(ILogger l, PlayerConnectionEvents pce, AccountService accountService, ChatActor ca,
-		NotificationActor na)
+		NotificationActor na, DialogActor da)
 	{
 		_chatActor = ca;
 		_notificationActor = na;
+		_dialogActor = da;
 		_logger = l.ForThisContext();
 		_accountService = accountService;
 		pce.OnPlayerConnected += OnPlayerConnect;
@@ -72,6 +74,13 @@ public sealed class TestController
 		builder.AddText("Cyan ", CHATTEXTSTYLE.CYAN);
 		builder.AddSender(player.Username, CHATTEXTSTYLE.SERVER);
 		_chatActor.SendMessage(player, builder.Build().Message);
+	}
+
+	[SlashCommand("dialog")]
+	public async Task DialogCommand(PiPlayer player, string[] args)
+	{
+		var result = await _dialogActor.ShowDialogAsync(player, args[0], string.Join(" ", args.Skip(1)));
+		_chatActor.SendMessage(player, $"You {result}");
 	}
 
 	/*
