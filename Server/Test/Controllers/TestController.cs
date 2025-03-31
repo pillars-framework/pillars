@@ -79,8 +79,35 @@ public sealed class TestController
 	[SlashCommand("dialog")]
 	public async Task DialogCommand(PiPlayer player, string[] args)
 	{
-		var result = await _dialogActor.ShowDialogAsync(player, args[0], string.Join(" ", args.Skip(1)));
-		_chatActor.SendMessage(player, $"You {result}");
+		if (args.Length == 0)
+		{
+			var result = await _dialogActor.ShowOkayDialogAsync(player, "Okay Dialog",
+				"This is a simple dialog with an okay button");
+			if (result != DIALOGRESULT.UNDEFINED_TIMEOUT)
+				_chatActor.SendMessage(player, $"You {result}");
+			else
+				_logger.Information("Player disconnected or timeout received for Okay Dialog!");
+		}
+		else if (args.Length == 1)
+		{
+			var result = await _dialogActor.ShowYesNoDialogAsync(player, "Two Button Dialog",
+				"This is a dialog with two buttons. Did you know, you could even customize the button texts?",
+				"Cool Stuff!", "Meh...");
+			if (result != DIALOGRESULT.UNDEFINED_TIMEOUT)
+				_chatActor.SendMessage(player, $"You {result}");
+			else
+				_logger.Information("Player disconnected or timeout received for YesNo Dialog!");
+		}
+		else if (args.Length == 2)
+		{
+			var result = await _dialogActor.ShowYesNoCancelDialogAsync(player, "Three Button Dialog",
+				"Well three buttons is the maximum. But wait, there is more. Each dialog has customizable timeout and reacts to player disconnects automatically.",
+				"Got it!", "Oof");
+			if (result != DIALOGRESULT.UNDEFINED_TIMEOUT)
+				_chatActor.SendMessage(player, $"You {result}");
+			else
+				_logger.Information("Player disconnected or timeout received for YesNoCancel Dialog!");
+		}
 	}
 
 	/*

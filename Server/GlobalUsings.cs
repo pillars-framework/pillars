@@ -66,3 +66,4 @@ global using Pillars.Notifications.Data;
 global using Pillars.Chat.Services;
 global using Pillars.Dialog.Actors;
 global using Pillars.Dialog.Data;
+global using Pillars.Dialog.Models;

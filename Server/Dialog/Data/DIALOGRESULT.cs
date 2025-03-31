@@ -2,6 +2,8 @@
 
 public enum DIALOGRESULT
 {
-	Accepted = 0,
-	Declined = 1
+	UNDEFINED_TIMEOUT = 0,
+	OKAY_YES = 1,
+	NO = 2,
+	CANCEL = 3
 }
