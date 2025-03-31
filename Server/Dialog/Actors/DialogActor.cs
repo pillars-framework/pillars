@@ -145,7 +145,8 @@ public sealed class DialogActor : PiActor<BpPiDialog>
 			}
 
 			// Initiate Dialog
-			// _worldActor.ShowDialog(player.Native, dialogId, title, message);
+			_worldActor.ShowDialog(player.Native, dialog.Id, (int)DIALOGTYPE.OKAY, title, message, okayText,
+				"", "");
 
 			// Await timeout result
 			var result = await AwaitDialogResult(dialog, timeoutSeconds);
@@ -187,7 +188,8 @@ public sealed class DialogActor : PiActor<BpPiDialog>
 			}
 
 			// Initiate Dialog
-			// _worldActor.ShowDialog(player.Native, dialogId, title, message);
+			_worldActor.ShowDialog(player.Native, dialog.Id, (int)DIALOGTYPE.YES_NO, title, message,
+				yesText, noText, "");
 
 			// Await timeout result
 			var result = await AwaitDialogResult(dialog, timeoutSeconds);
@@ -231,7 +233,8 @@ public sealed class DialogActor : PiActor<BpPiDialog>
 			}
 
 			// Initiate Dialog
-			// _worldActor.ShowDialog(player.Native, dialogId, title, message);
+			_worldActor.ShowDialog(player.Native, dialog.Id, (int)DIALOGTYPE.YES_NO_CANCEL, title, message,
+				yesText, noText, cancelText);
 
 			// Await timeout result
 			var result = await AwaitDialogResult(dialog, timeoutSeconds);
