@@ -6,3 +6,4 @@
 Server/appsettings.json
 **/*settings.json
 **/*.props
+Client/Raw/**/Saved/*
